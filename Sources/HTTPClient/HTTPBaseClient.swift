@@ -10,6 +10,10 @@ extension HTTPBaseClient {
         return AF.request(url)
     }
     
+    internal static func _dataRequest<T:Alamofire.RequestInterceptor>(url: URL, interceptor: T?) -> DataRequest {
+        return interceptor == nil ? AF.request(url) : AF.request(url, interceptor: interceptor)
+    }
+    /*
     internal static func _dataRequest(url: URL, interceptor: JWTRequestInterceptor?) -> DataRequest {
         return interceptor == nil ? AF.request(url) : AF.request(url, interceptor: interceptor)
     }
@@ -21,6 +25,12 @@ extension HTTPBaseClient {
     internal static func _dataRequest(url: URL, interceptor: QueryParameterAuthorizationRequestInterceptor?) -> DataRequest {
         return interceptor == nil ? AF.request(url) : AF.request(url, interceptor: interceptor)
     }
+    */
+    
+    internal static func log(data: Data) -> Data {
+        print(String(decoding: data, as: UTF8.self))
+        return data
+    }
     
     internal static func _processDataRequest<T:Codable>(dataRequest: DataRequest) -> AnyPublisher<T,Error> {
         return dataRequest
@@ -28,7 +38,7 @@ extension HTTPBaseClient {
             .result()
             .setFailureType(to: Error.self)
             .map { try! $0.get() }
-            .map { print(String(decoding: $0, as: UTF8.self)); return $0 }
+            .map(log)
             .decode(type: T.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
@@ -54,11 +64,11 @@ extension HTTPBaseClient {
     ///   - url: A URL object
     ///   - interceptor: An instance of JWTRequestInterceptor
     /// - Returns: A publisher that returns an object that conforms to Codable, or an error
-    internal static func _request<T:Codable>(url: URL, interceptor: JWTRequestInterceptor?) -> AnyPublisher<T,Error> {
+    internal static func _request<T:Codable, U: Alamofire.RequestInterceptor>(url: URL, interceptor: U?) -> AnyPublisher<T,Error> {
         let request = _dataRequest(url: url, interceptor: interceptor)
         return _processDataRequest(dataRequest: request)
     }
-    
+    /*
     /// Make a HTTP request with a URL object that passes a token to the server in the request headers
     /// - Parameters:
     ///   - url: A URL object
@@ -79,4 +89,5 @@ extension HTTPBaseClient {
         let request = _dataRequest(url: url, interceptor: interceptor)
         return _processDataRequest(dataRequest: request)
     }
+    */
 }

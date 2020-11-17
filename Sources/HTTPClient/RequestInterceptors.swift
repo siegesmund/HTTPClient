@@ -11,15 +11,16 @@ import Alamofire
 ///
 
 internal protocol HeaderTokenAuthorizationInterceptor: Alamofire.RequestInterceptor {
-    var value: String { get }
+    var value: String { get set }
 }
 
 extension HeaderTokenAuthorizationInterceptor {
+    
     public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var mutableUrlRequest = urlRequest
         mutableUrlRequest.setValue(value, forHTTPHeaderField: "Authorization")
         completion(.success(mutableUrlRequest))
-    }
+    }    
 }
 
 

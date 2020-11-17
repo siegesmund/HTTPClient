@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import Alamofire
 
 //
 //
@@ -8,7 +9,6 @@ import Combine
 public protocol NoAuthorization: HTTPBaseClient {}
 
 extension NoAuthorization {
-    
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
                                           https: Bool = true) -> AnyPublisher<T,Error> {
