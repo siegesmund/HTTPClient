@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "097e1f03166d49b31f824507fb85ad843b14fc13",
+          "version": "5.3.0"
+        }
+      },
+      {
+        "package": "CombineExpectations",
+        "repositoryURL": "https://github.com/groue/CombineExpectations",
+        "state": {
+          "branch": null,
+          "revision": "96d5604151c94b21fbca6877b237e80af9e821dd",
+          "version": "0.5.0"
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+        "state": {
+          "branch": null,
+          "revision": "654d52d30f3dd4592e944c3e0bccb53178c992f6",
+          "version": "4.2.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
