@@ -37,6 +37,10 @@ extension HTTPBaseClient {
 // Requests that utilize interceptors
 extension HTTPBaseClient {
     
+    public static func request<T:Codable> (url: URL) -> AnyPublisher<T,Error> {
+        return _request(url: url)
+    }
+    
     /// Make a HTTP request with a URL object
     /// - Parameter url: A URL object
     /// - Returns: A publisher that returns an object that conforms to Codable, or an error
