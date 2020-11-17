@@ -4,11 +4,57 @@ import Alamofire
 @testable import HTTPClient
 
 
-
-final class HTTPClientTests: XCTestCase, CombinePublisherTestCase {
+struct SWAPIPeople: Codable,
+                    NoAuthorization {
+    // URLBuildable
+    // This must be just the server
+    // No http/https; no /api or versioning.
+    static var server: String = "swapi.dev"
     
-    func testToken() {
-        // XCTAssertTrue(Data.iex.v1.tokenExists())
+    var name: String
+    var height: String
+    var mass: String
+    var hair_color: String
+    var skin_color: String
+    var eye_color: String
+    var birth_year: String
+    var gender: String
+    var homeworld: String
+    var films: [String]
+    var species: [String]
+    var vehicles: [String]
+    var starships: [String]
+    var created: String
+    var edited: String
+    var url: String
+}
+
+
+public struct Metadata: Codable,
+                        HeaderTokenAuthorization,
+                        KeychainAuthorizable {
+    
+    public static var server: String = "api.tiingo.com"
+    public static var keychainAuthorizationTokenName: String = "TIINGO_API_KEY"
+    
+    var ticker: String
+    var name: String
+    var description: String
+    var startDate: String
+    var endDate: String
+}
+
+final class HTTPClientTests: XCTestCase,
+                             CombinePublisherTestCase {
+    
+    func testSwapi() {
+        let publisher: AnyPublisher<SWAPIPeople,Error> = SWAPIPeople.request(path: "/api/people/1/")
+        XCTAssertEqual(values(publisher).name, "Luke Skywalker")
+    }
+    
+    func testTiingo() {
+        let publisher: AnyPublisher<Metadata,Error> = Metadata.request(path: "/tiingo/daily/AAPL")
+        XCTAssertEqual(values(publisher).ticker, "AAPL")
     }
     
 }

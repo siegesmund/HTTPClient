@@ -1,7 +1,28 @@
 import Foundation
 import Combine
 
-public protocol QueryParameterAuthorization: HTTPClient, KeychainAuthorizable {}
+//
+//
+//
+
+public protocol NoAuthorization: HTTPBaseClient {}
+
+extension NoAuthorization {
+    public static func request<T:Codable>(path: String,
+                                          arguments: [String:String]? = nil,
+                                          https: Bool = true) -> AnyPublisher<T,Error> {
+        return _request(url: url(path: path,
+                                 arguments: arguments,
+                                 https: https,
+                                 server: server)!)
+    }
+}
+
+//
+//
+//
+
+public protocol QueryParameterAuthorization: HTTPBaseClient, TokenAuthorizable {}
 
 extension QueryParameterAuthorization {
     
@@ -9,33 +30,60 @@ extension QueryParameterAuthorization {
         return QueryParameterAuthorizationRequestInterceptor(token: token!, authParameterName: "token")
     }
     
-    public static func request<T:Codable>(url: URL) -> AnyPublisher<T,Error> {
-        return request(url: url, interceptor: interceptor)
+    public static func request<T:Codable>(path: String,
+                                          arguments: [String:String]? = nil,
+                                          https: Bool = true) -> AnyPublisher<T,Error> {
+        
+        return _request(url: url(path: path,
+                                 arguments: arguments,
+                                 https: https,
+                                 server: server)!,
+                        interceptor: interceptor)
     }
-    
 }
 
-public protocol HeaderTokenAuthorization: HTTPClient, KeychainAuthorizable {}
+//
+//
+//
+
+public protocol HeaderTokenAuthorization: HTTPBaseClient, TokenAuthorizable {}
 
 extension HeaderTokenAuthorization {
     private static var interceptor: HeaderAuthorizationRequestInterceptor {
         return HeaderAuthorizationRequestInterceptor(token: token!)
     }
     
-    public static func request<T:Codable>(url: URL) -> AnyPublisher<T,Error> {
-        return request(url: url, interceptor: interceptor)
+    public static func request<T:Codable>(path: String,
+                                          arguments: [String:String]? = nil,
+                                          https: Bool = true) -> AnyPublisher<T,Error> {
+        
+        return _request(url: url(path: path,
+                                 arguments: arguments,
+                                 https: https,
+                                 server: server)!,
+                        interceptor: interceptor)
     }
 }
 
+//
+//
+//
 
-public protocol JWTAuthorization: HTTPClient, KeychainAuthorizable {}
+public protocol JWTAuthorization: HTTPBaseClient, TokenAuthorizable {}
 
 extension JWTAuthorization {
     private static var interceptor: JWTRequestInterceptor {
         return JWTRequestInterceptor(jwt: token!)
     }
     
-    public static func request<T:Codable>(url: URL) -> AnyPublisher<T,Error> {
-        return request(url: url, interceptor: interceptor)
+    public static func request<T:Codable>(path: String,
+                                          arguments: [String:String]? = nil,
+                                          https: Bool = true) -> AnyPublisher<T,Error> {
+        
+        return _request(url: url(path: path,
+                                 arguments: arguments,
+                                 https: https,
+                                 server: server)!,
+                        interceptor: interceptor)
     }
 }

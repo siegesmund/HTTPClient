@@ -1,6 +1,6 @@
 # HTTPClient
 
-A basic, protocol oriented client for consuming APIs, built with Swift and Alamofire
+A collection of protocols written in Swift and built on Alamofire to make consuming REST APIs easier
 
 
 ### Authorization

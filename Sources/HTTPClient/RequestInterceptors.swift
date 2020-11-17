@@ -10,7 +10,6 @@ import Alamofire
 /// as the Authorization value
 ///
 
-// https://www.avanderlee.com/swift/authentication-alamofire-request-adapter/
 internal protocol HeaderTokenAuthorizationInterceptor: Alamofire.RequestInterceptor {
     var value: String { get }
 }
