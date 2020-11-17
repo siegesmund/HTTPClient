@@ -30,12 +30,6 @@ extension HTTPBaseClient {
 // Requests that utilize interceptors
 extension HTTPBaseClient {
     
-    /*
-    private static func request<T:Codable> (url: URL) -> AnyPublisher<T,Error> {
-        return _request(url: url, interceptor: nil as NilRequestInterceptor?)
-    }
-    */
-    
     /// Make a HTTP request with a URL object that passes a JWT to the server in the request headers
     /// - Parameters:
     ///   - url: A URL object
