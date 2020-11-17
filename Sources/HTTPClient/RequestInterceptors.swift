@@ -79,3 +79,6 @@ internal final class QueryParameterAuthorizationRequestInterceptor: QueryParamet
         self.authParameterName = authParameterName
     }
 }
+
+
+internal final class NilRequestInterceptor: Alamofire.RequestInterceptor {}

@@ -15,7 +15,8 @@ extension NoAuthorization {
         return _request(url: url(path: path,
                                  arguments: arguments,
                                  https: https,
-                                 server: server)!)
+                                 server: server)!,
+                        interceptor: nil as NilRequestInterceptor?)
     }
 }
 
