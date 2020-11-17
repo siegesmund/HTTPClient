@@ -28,7 +28,7 @@ extension HTTPBaseClient {
             .result()
             .setFailureType(to: Error.self)
             .map { try! $0.get() }
-            // .map { print(String(decoding: $0, as: UTF8.self)); return $0 }
+            .map { print(String(decoding: $0, as: UTF8.self)); return $0 }
             .decode(type: T.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
