@@ -20,7 +20,7 @@ extension HeaderTokenAuthorizationInterceptor {
         var mutableUrlRequest = urlRequest
         mutableUrlRequest.setValue(value, forHTTPHeaderField: "Authorization")
         completion(.success(mutableUrlRequest))
-    }    
+    }
 }
 
 
@@ -31,7 +31,7 @@ internal protocol QueryParameterRequestAuthorizationInterceptor: Alamofire.Reque
 }
 
 internal extension QueryParameterRequestAuthorizationInterceptor {
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+    public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         // Create a URLComponents object from the URLRequest URL object
         var components: URLComponents? = URLComponents(url: urlRequest.url!, resolvingAgainstBaseURL: false)
         
@@ -55,25 +55,25 @@ internal extension QueryParameterRequestAuthorizationInterceptor {
 // MARK: Interceptor Classes
 
 /// Adds Authorization: Bearer <token> to the request headers
-internal final class JWTRequestInterceptor: HeaderTokenAuthorizationInterceptor {
-    internal var value: String
+public final class JWTRequestInterceptor: HeaderTokenAuthorizationInterceptor {
+    public var value: String
     init(jwt: String) {
         self.value = "Bearer \(jwt)"
     }
 }
 
 /// Adds Authorization: Token <token> to the request headers
-internal final class HeaderAuthorizationRequestInterceptor: HeaderTokenAuthorizationInterceptor {
-    internal var value: String
+public final class HeaderAuthorizationRequestInterceptor: HeaderTokenAuthorizationInterceptor {
+    public var value: String
     init(token: String) {
         self.value = "Token \(token)"
     }
 }
 
 /// Adds a query parameter <authParameterName>=<token> to the url query string
-internal final class QueryParameterAuthorizationRequestInterceptor: QueryParameterRequestAuthorizationInterceptor {
-    internal var token: String
-    internal var authParameterName: String
+public final class QueryParameterAuthorizationRequestInterceptor: QueryParameterRequestAuthorizationInterceptor {
+    public var token: String
+    public var authParameterName: String
     init(token: String, authParameterName: String) {
         self.token = token
         self.authParameterName = authParameterName

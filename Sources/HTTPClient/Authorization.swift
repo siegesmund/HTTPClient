@@ -11,7 +11,7 @@ public protocol NoAuthorization: HTTPBaseClient {}
 extension NoAuthorization {
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
+                                          https: Bool = true) -> AnyPublisher<HTTPResponse<T>,Error> {
         return _request(url: url(path: path,
                                  arguments: arguments,
                                  https: https,
@@ -34,7 +34,9 @@ extension QueryParameterAuthorization {
     
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
+                                          https: Bool = true,
+                                          prefetch: RequestHook<T,QueryParameterAuthorizationRequestInterceptor>? = nil,
+                                          postfetch: ResponseHook<T>? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
@@ -57,13 +59,17 @@ extension HeaderTokenAuthorization {
     
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
+                                          https: Bool = true,
+                                          prefetch: RequestHook<T,HeaderAuthorizationRequestInterceptor>? = nil,
+                                          postfetch: ResponseHook<T>? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
                                  https: https,
                                  server: server)!,
-                        interceptor: interceptor)
+                        interceptor: interceptor,
+                        prefetchHook: prefetch,
+                        postfetchHook: postfetch)
     }
 }
 
@@ -74,18 +80,20 @@ extension HeaderTokenAuthorization {
 public protocol JWTAuthorization: HTTPBaseClient, TokenAuthorizable {}
 
 extension JWTAuthorization {
+    
     private static var interceptor: JWTRequestInterceptor {
         return JWTRequestInterceptor(jwt: token!)
     }
     
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
+                                          https: Bool = true,
+                                          preRequestHook: RequestHook<T,JWTRequestInterceptor>? = nil,
+                                          postRequestHook: ResponseHook<T>? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
         
-        return _request(url: url(path: path,
-                                 arguments: arguments,
-                                 https: https,
-                                 server: server)!,
-                        interceptor: interceptor)
+        return _request(url: url(path: path, arguments: arguments, https: https, server: server)!,
+                        interceptor: interceptor,
+                        prefetchHook: preRequestHook,
+                        postfetchHook: postRequestHook)
     }
 }

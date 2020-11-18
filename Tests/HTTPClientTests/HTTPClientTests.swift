@@ -54,12 +54,12 @@ final class HTTPClientTests: XCTestCase,
                              CombinePublisherTestCase {
     
     func testSwapi() {
-        let publisher: AnyPublisher<Response<SWAPIPeople>,Error> = SWAPIPeople.request(path: "/api/people/1/")
+        let publisher: AnyPublisher<HTTPResponse<SWAPIPeople>,Error> = SWAPIPeople.request(path: "/api/people/1/")
         XCTAssertEqual(values(publisher).data!.name, "Luke Skywalker")
     }
     
     func testTiingo() {
-        let publisher: AnyPublisher<Response<Metadata>,Error> = Metadata.request(path: "/tiingo/daily/AAPL")
+        let publisher: AnyPublisher<HTTPResponse<Metadata>,Error> = Metadata.request(path: "/tiingo/daily/AAPL", prefetch: { _ in print("I'm requesting the metadata for AAPL!!!")})
         XCTAssertEqual(values(publisher).data!.ticker, "AAPL")
     }
     
