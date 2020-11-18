@@ -7,8 +7,8 @@ public typealias ResponseHook<T:Codable> = (HTTPResponse<T>) -> Void
 
 public struct HTTPRequest<T:Codable,U:Alamofire.RequestInterceptor> {
     
-    let url: URL
-    let timestamp: Date = Date()
+    public let url: URL
+    public let timestamp: Date = Date()
 
     private let interceptor: U?
     
@@ -48,9 +48,9 @@ public struct HTTPRequest<T:Codable,U:Alamofire.RequestInterceptor> {
 }
 
 public struct HTTPResponse<T:Codable> {
-    let url: URL
-    let data: T?
-    let timestamp: Date
-    let postfetchHook: ResponseHook<T>?
+    public let url: URL
+    public let data: T?
+    public let timestamp: Date
+    internal let postfetchHook: ResponseHook<T>?
 }
 
