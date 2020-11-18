@@ -6,6 +6,9 @@ import Alamofire
 
 struct SWAPIPeople: Codable,
                     NoAuthorization {
+    
+    static var log: Bool = true
+    
     // URLBuildable
     // This must be just the server
     // No http/https; no /api or versioning.
@@ -33,6 +36,9 @@ struct SWAPIPeople: Codable,
 public struct Metadata: Codable,
                         HeaderTokenAuthorization,
                         KeychainAuthorizable {
+
+    public static var log: Bool = true
+    
     
     public static var server: String = "api.tiingo.com"
     public static var keychainAuthorizationTokenName: String = "TIINGO_API_KEY"
@@ -48,13 +54,13 @@ final class HTTPClientTests: XCTestCase,
                              CombinePublisherTestCase {
     
     func testSwapi() {
-        let publisher: AnyPublisher<SWAPIPeople,Error> = SWAPIPeople.request(path: "/api/people/1/")
-        XCTAssertEqual(values(publisher).name, "Luke Skywalker")
+        let publisher: AnyPublisher<Response<SWAPIPeople>,Error> = SWAPIPeople.request(path: "/api/people/1/")
+        XCTAssertEqual(values(publisher).data!.name, "Luke Skywalker")
     }
     
     func testTiingo() {
-        let publisher: AnyPublisher<Metadata,Error> = Metadata.request(path: "/tiingo/daily/AAPL")
-        XCTAssertEqual(values(publisher).ticker, "AAPL")
+        let publisher: AnyPublisher<Response<Metadata>,Error> = Metadata.request(path: "/tiingo/daily/AAPL")
+        XCTAssertEqual(values(publisher).data!.ticker, "AAPL")
     }
     
 }

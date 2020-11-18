@@ -11,7 +11,7 @@ public protocol NoAuthorization: HTTPBaseClient {}
 extension NoAuthorization {
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<T,Error> {
+                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
         return _request(url: url(path: path,
                                  arguments: arguments,
                                  https: https,
@@ -34,7 +34,7 @@ extension QueryParameterAuthorization {
     
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<T,Error> {
+                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
@@ -57,7 +57,7 @@ extension HeaderTokenAuthorization {
     
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<T,Error> {
+                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
@@ -80,7 +80,7 @@ extension JWTAuthorization {
     
     public static func request<T:Codable>(path: String,
                                           arguments: [String:String]? = nil,
-                                          https: Bool = true) -> AnyPublisher<T,Error> {
+                                          https: Bool = true) -> AnyPublisher<Response<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
