@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import KeychainAccess
 
 public protocol KeychainAuthorizable: TokenAuthorizable {
@@ -28,6 +29,13 @@ extension KeychainAuthorizable {
         return false
     }
     
+    /// A method to save tokens to Keychain
+    /// - Parameter token: the token to save
+    /// - Returns: A publisher that emits true if the token was saved, false otherwise
+    public static func setToken(token: String) -> AnyPublisher<Bool,Never> {
+        return Just(setToken(token: token)).eraseToAnyPublisher()
+    }
+    
     /// A convenience function to test if there is a Keychain value associated with a key
     /// - Returns: true if a keychain value exists, false otherwise
     public static func tokenExists() -> Bool {
@@ -36,5 +44,11 @@ extension KeychainAuthorizable {
             return true
         }
         return false
+    }
+    
+    /// A convenience function to test if there is a Keychain value associated with a key
+    /// - Returns: A publisher that emits true if a keychain value exists, false otherwise
+    public static func tokenExists() -> AnyPublisher<Bool,Never> {
+        return Just(tokenExists()).eraseToAnyPublisher()
     }
 }
