@@ -21,8 +21,9 @@ extension KeychainAuthorizable {
     /// A method to save tokens to Keychain
     /// - Parameter token: the token to save
     /// - Returns: true if the token was saved, false otherwise
-    public static func setToken(token: String) -> Bool {
+    public static func setToken(token: String, sync: Bool = true) -> Bool {
         let keychain = Keychain(server: server, protocolType: .https)
+            .synchronizable(sync)
         keychain[keychainAuthorizationTokenName] = token
         if let _ = keychain[keychainAuthorizationTokenName] {
             return true
@@ -33,8 +34,8 @@ extension KeychainAuthorizable {
     /// A method to save tokens to Keychain
     /// - Parameter token: the token to save
     /// - Returns: A publisher that emits true if the token was saved, false otherwise
-    public static func setToken(token: String) -> AnyPublisher<Bool,Never> {
-        return Just(setToken(token: token)).eraseToAnyPublisher()
+    public static func setToken(token: String, sync: Bool = true) -> AnyPublisher<Bool,Never> {
+        return Just(setToken(token: token, sync: sync)).eraseToAnyPublisher()
     }
     
     /// A convenience function to test if there is a Keychain value associated with a key
