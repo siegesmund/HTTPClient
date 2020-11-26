@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import KeychainAccess
 
+
 public protocol KeychainAuthorizable: TokenAuthorizable {
     /// The base url of the server that the stored token authorizes, e.g. github.com
     static var server: String { get }
