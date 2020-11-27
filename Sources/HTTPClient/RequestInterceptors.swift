@@ -30,7 +30,7 @@ internal protocol QueryParameterRequestAuthorizationInterceptor: Alamofire.Reque
     var authParameterName: String { get }
 }
 
-internal extension QueryParameterRequestAuthorizationInterceptor {
+extension QueryParameterRequestAuthorizationInterceptor {
     public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         // Create a URLComponents object from the URLRequest URL object
         var components: URLComponents? = URLComponents(url: urlRequest.url!, resolvingAgainstBaseURL: false)
