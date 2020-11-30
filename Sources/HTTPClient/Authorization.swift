@@ -2,6 +2,8 @@ import Foundation
 import Combine
 import Alamofire
 
+// MARK: Developer Facing Methods
+
 //
 //
 //
@@ -36,13 +38,17 @@ extension QueryParameterAuthorization {
                                           arguments: [String:String]? = nil,
                                           https: Bool = true,
                                           prefetch: RequestHook<T,QueryParameterAuthorizationRequestInterceptor>? = nil,
-                                          postfetch: ResponseHook<T>? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
+                                          postfetch: ResponseHook<T>? = nil,
+                                          dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
                                  https: https,
                                  server: server)!,
-                        interceptor: interceptor)
+                        interceptor: interceptor,
+                        prefetchHook: prefetch,
+                        postfetchHook: postfetch,
+                        dateDecodingStrategy: dateDecodingStrategy)
     }
 }
 
@@ -53,6 +59,7 @@ extension QueryParameterAuthorization {
 public protocol HeaderTokenAuthorization: HTTPBaseClient, TokenAuthorizable {}
 
 extension HeaderTokenAuthorization {
+    
     private static var interceptor: HeaderAuthorizationRequestInterceptor {
         return HeaderAuthorizationRequestInterceptor(token: token!)
     }
@@ -61,7 +68,8 @@ extension HeaderTokenAuthorization {
                                           arguments: [String:String]? = nil,
                                           https: Bool = true,
                                           prefetch: RequestHook<T,HeaderAuthorizationRequestInterceptor>? = nil,
-                                          postfetch: ResponseHook<T>? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
+                                          postfetch: ResponseHook<T>? = nil,
+                                          dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
         
         return _request(url: url(path: path,
                                  arguments: arguments,
@@ -69,7 +77,8 @@ extension HeaderTokenAuthorization {
                                  server: server)!,
                         interceptor: interceptor,
                         prefetchHook: prefetch,
-                        postfetchHook: postfetch)
+                        postfetchHook: postfetch,
+                        dateDecodingStrategy: dateDecodingStrategy)
     }
 }
 

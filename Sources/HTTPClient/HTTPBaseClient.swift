@@ -8,7 +8,7 @@ public protocol HTTPBaseClient: URLBuildable {
     static var log: Bool { get }
 }
 
-
+// MARK: Internal Methods
 extension HTTPBaseClient {
     
     var log: Bool { return false }
@@ -43,12 +43,14 @@ extension HTTPBaseClient {
                                   U: Alamofire.RequestInterceptor>(url: URL,
                                                                    interceptor: U?,
                                                                    prefetchHook: RequestHook<T,U>? = nil,
-                                                                   postfetchHook: ResponseHook<T>? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
+                                                                   postfetchHook: ResponseHook<T>? = nil,
+                                                                   dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? = nil) -> AnyPublisher<HTTPResponse<T>,Error> {
         
         return HTTPRequest<T,U>(url: url,
                                 interceptor: interceptor,
                                 prefetchHook: prefetchHook,
-                                postfetchHook: postfetchHook)
+                                postfetchHook: postfetchHook,
+                                dateDecodingStrategy: dateDecodingStrategy)
             .publisher
             .flatMap(_prefetch)
             .flatMap(_fetch)

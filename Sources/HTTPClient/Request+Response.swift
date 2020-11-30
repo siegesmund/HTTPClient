@@ -11,6 +11,7 @@ public struct HTTPRequest<T:Codable,U:Alamofire.RequestInterceptor> {
     public let timestamp: Date = Date()
 
     private let interceptor: U?
+    internal let dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?
     
     internal let prefetchHook: RequestHook<T,U>?
     internal let postfetchHook: ResponseHook<T>?
@@ -25,7 +26,9 @@ public struct HTTPRequest<T:Codable,U:Alamofire.RequestInterceptor> {
             .result()
             .map {
                 let data = try! $0.get()
-                let jsonData = try! JSONDecoder().decode(T.self, from: data)
+                let decoder = JSONDecoder()
+                if let strategy = dateDecodingStrategy { decoder.dateDecodingStrategy = strategy }
+                let jsonData = try! decoder.decode(T.self, from: data)
                 return HTTPResponse<T>(url: self.url, data: jsonData, timestamp: self.timestamp, postfetchHook: postfetchHook)
             }
             .setFailureType(to: Error.self)
@@ -39,11 +42,13 @@ public struct HTTPRequest<T:Codable,U:Alamofire.RequestInterceptor> {
     init(url: URL,
          interceptor: U? = nil,
          prefetchHook: RequestHook<T,U>? = nil,
-         postfetchHook: ResponseHook<T>? = nil) {
+         postfetchHook: ResponseHook<T>? = nil,
+         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? = nil) {
         self.url = url
         self.interceptor = interceptor
         self.prefetchHook = prefetchHook
         self.postfetchHook = postfetchHook
+        self.dateDecodingStrategy = dateDecodingStrategy
     }
 }
 

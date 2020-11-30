@@ -36,7 +36,7 @@ struct SWAPIPeople: Codable,
 public struct Metadata: Codable,
                         HeaderTokenAuthorization,
                         KeychainAuthorizable {
-
+    
     public static var log: Bool = true
     
     
